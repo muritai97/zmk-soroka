@@ -16,12 +16,12 @@
 
 
 / {
-    chosen {
-        zmk,matrix_transform = &split_space_1_225_275_1_transform;
-    };
+  chosen {
+    zmk,matrix_transform = &split_space_1_225_275_1_transform;
+  };
+};
 
-
-
+/ {
     keymap {
         compatible = "zmk,keymap";
         default_layer {
