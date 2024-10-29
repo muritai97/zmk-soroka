@@ -4,7 +4,7 @@ name: soroka
 type: shield
 url: https://github.com/kapee1/soroka/
 requires:
-  - rp_pico
+  - sparkfun_pro_micro_rp2040
 features:
   - keys
   - underglow
