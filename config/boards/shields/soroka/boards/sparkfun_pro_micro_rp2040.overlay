@@ -55,5 +55,5 @@
     compatible = "zmk,ext-power-generic";
     control-gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>; /* WS2812_CE */
     init-delay-ms = <100>;
-};
+    };
 };
