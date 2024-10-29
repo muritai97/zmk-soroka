@@ -67,7 +67,6 @@ void hide_battery() {
 // Инициализация работ
 void init_battery_leds() {
     k_work_init_delayable(&show_battery_work, show_battery_work_handler);
-    k_work_init_delayable(&hide_battery_work, hide_battery_work_handler);
 }
 
 // Вызывается при инициализации системы
