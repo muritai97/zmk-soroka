@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
- 
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
@@ -14,13 +14,17 @@
 &lt { quick-tap-ms = <200>; };
 &mt { quick-tap-ms = <200>; };
 
-/ {
+&led_strip {
+    chain-length = <25>; // Указываем количество светодиодов на ленте
+};
+
+&{
   chosen {
     zmk,matrix_transform = &split_space_1_225_275_1_transform;
   };
 };
 
-/ {
+&{
     keymap {
         compatible = "zmk,keymap";
         default_layer {
@@ -38,10 +42,9 @@
                 &trans   &kp F1  &kp F2  &kp  F3 &kp F4   &kp F5  &kp F6   &kp  F7 &kp F8  &kp  F9  &kp F10   &kp F11   &kp F12  &trans 
                 &trans      &kp N1  &kp N2  &kp N3  &kp  N4  &kp N5   &kp N6   &kp  N7 &kp N8  &kp N9  &kp N0  &kp   MINUS    &kp EQUAL
                 &trans         &kp  EXCL &kp AT  &kp  HASH   &kp DLLR  &kp   PRCNT &kp CARET   &kp AMPS   &kp  STAR &kp RPAR   &kp RPAR  &kp UNDER &kp PLUS
-                &bootloader &trans   &trans            &trans      &trans       &trans        &trans          &trans   &trans   &trans   &trans           
+                &bootloader &trans   &trans            &trans      &trans       &trans        &trans          &trans   &rgb_ug RGB_OFF  &trans           
             >;
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
         };
     };
 };
-
