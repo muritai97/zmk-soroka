@@ -5,6 +5,7 @@
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
+target_sources(app PRIVATE status_led.c)
 
 / {
 	chosen {
