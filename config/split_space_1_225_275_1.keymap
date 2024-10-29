@@ -14,9 +14,6 @@
 &lt { quick-tap-ms = <200>; };
 &mt { quick-tap-ms = <200>; };
 
-&led_strip {
-    chain-length = <25>; // Указываем количество светодиодов на ленте
-};
 
 &{
   chosen {
