@@ -90,7 +90,6 @@
         resolution = <4>;
         // status = "disabled";
     };
-    
         compatible = "zmk,keymap-sensors";
         sensors = <&left_encoder>;
     };
