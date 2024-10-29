@@ -2,41 +2,45 @@
  * Copyright (c) 2024, Ian Wakely
  * SPDX-License-Identifier: Apache-2.0
  */
-#include <zephyr/dt-bindings/led/led.h>
-#include <dt-bindings/pinctrl/rpi-pico-rp2040-pinctrl.h>
+#include <dt-bindings/led/led.h>
 
+&pinctrl {
+    pio0_spi0_default: pio0_spi0_default {
+        group1 {
+            pinmux = <PIO0_P16>;
+        };
+    };
+};
+&pio0 {
+    status = "okay";
+    pio0_spi0: pio0_spi0 {
+        pinctrl-0 = <&pio0_spi0_default>;
+        pinctrl-names = "default";
+        compatible = "raspberrypi,pico-spi-pio";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        clocks = <&system_clk>;
+        clock-frequency = <4000000>;
+        clk-gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>;     /* Must be defined. Select a pin that is not used elsewhere. */
+        mosi-gpios = <&pro_micro 1 GPIO_ACTIVE_HIGH>; /* Data In pin. */
+        miso-gpios = <&pro_micro 1 GPIO_ACTIVE_HIGH>; /* Must be defined. Re-using the DI pin is OK for WS2812. */
+        led_strip: ws2812@0 {
+            compatible = "worldsemi,ws2812-spi";
+            /* SPI */
+            reg = <0>; /* ignored, but necessary for SPI bindings */
+            spi-max-frequency = <4000000>;
+            /* WS2812 */
+            chain-length = <10>; /* number of LEDs */
+            spi-one-frame = <0x70>;
+            spi-zero-frame = <0x40>;
+            color-mapping = <LED_COLOR_ID_GREEN
+                             LED_COLOR_ID_RED
+                             LED_COLOR_ID_BLUE>;
+        };
+    };
+};
 / {
     chosen {
         zmk,underglow = &led_strip;
     };
-};
-&pinctrl {
-	pinctrl_bff_ws2812: pinctrl_bff_ws2812 {
-		ws2812 {
-			pinmux = <PIO0_P16>;
-		};
-	};
-};
-
-&pio0 {
-	status = "okay";
-
-	pio-ws2812 {
-		compatible = "worldsemi,ws2812-rpi_pico-pio";
-		status = "okay";
-		pinctrl-0 = <&ws2812_pio0_default>;
-		pinctrl-names = "default";
-		bit-waveform = <3>, <3>, <4>;
-
-		ws2812: ws2812 {
-			status = "okay";
-			gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
-			chain-length = <1>;
-			color-mapping = <LED_COLOR_ID_GREEN
-					 LED_COLOR_ID_RED
-					 LED_COLOR_ID_BLUE>;
-			reset-delay = <280>;
-			frequency = <800000>;
-		};
-	};
 };
