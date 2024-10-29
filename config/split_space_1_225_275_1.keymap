@@ -6,6 +6,9 @@
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/ext_power.h>
 #include <dt-bindings/zmk/rgb.h>
 
 #define DEFAULT 0
@@ -30,7 +33,7 @@
                 &kp TAB   &kp Q     &kp W     &kp E     &kp R     &kp T     &kp Y     &kp U     &kp I     &kp O     &kp P     &kp LBKT  &kp RBKT  &kp BSLH
                 &kp LCTRL    &kp A     &kp S     &kp D     &kp F     &kp G     &kp H     &kp J     &kp K     &kp L     &kp SCLN  &kp QUOT          &kp ENTER
                 &kp LSHFT     &kp Z     &kp X     &kp C     &kp V     &kp B     &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH        &kp RSHFT &mo LOWER
-                &kp LCTRL &kp LGUI &kp LALT            &lt LOWER ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt LOWER DEL       &kp LALT    &kp LGUI    &check_bat           &kp C_MUTE
+                &kp LCTRL &kp LGUI &kp LALT            &lt LOWER ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt LOWER DEL       &ext_power EP_ON &rgb_ug RGB_OFF &check_bat          &kp C_MUTE
             >;
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
@@ -46,3 +49,5 @@
         };
     };
 };
+
+
