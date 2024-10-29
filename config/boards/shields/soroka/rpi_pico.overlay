@@ -1,21 +1,42 @@
-#include <dt-bindings/led/led.h>
+/*
+ * Copyright (c) 2024, Ian Wakely
+ * SPDX-License-Identifier: Apache-2.0
+ */
+#include <zephyr/dt-bindings/led/led.h>
+#include <dt-bindings/pinctrl/rpi-pico-rp2040-pinctrl.h>
 
 / {
-      chosen {
-          zephyr,led-strip = &rgb_led;
-      };
+	aliases {
+		led-strip = &bff_led_strip;
+	};
+};
+&pinctrl {
+	pinctrl_bff_ws2812: pinctrl_bff_ws2812 {
+		ws2812 {
+			pinmux = <PIO0_P16>;
+		};
+	};
+};
 
-      rgb_led: ws2812 {
-          compatible = "worldsemi,ws2812-gpio";
-          chain-length = <1>;
-          color-mapping = <LED_COLOR_ID_GREEN
-                           LED_COLOR_ID_RED
-                           LED_COLOR_ID_BLUE>;
-          reset-delay = <50>;
-          gpios = <&gpio0 16 0>;
-          delay-t1h = <48>;
-          delay-t1l = <32>;
-          delay-t0h = <16>;
-          delay-t0l = <32>;
-      };
+&pio0 {
+	status = "okay";
+
+	bff-ws2812 {
+		compatible = "worldsemi,ws2812-rpi_pico-pio";
+		status = "okay";
+		pinctrl-0 = <&pinctrl_bff_ws2812>;
+		pinctrl-names = "default";
+		bit-waveform = <3>, <3>, <4>;
+
+		bff_led_strip: bff_led_strip {
+			status = "okay";
+			gpios = <&xiao_d 3 GPIO_ACTIVE_HIGH>;
+			chain-length = <25>;
+			color-mapping = <LED_COLOR_ID_GREEN
+					 LED_COLOR_ID_RED
+					 LED_COLOR_ID_BLUE>;
+			reset-delay = <280>;
+			frequency = <800000>;
+		};
+	};
 };
