@@ -42,11 +42,7 @@
         };
     };
 };
-&ext_power {
-    compatible = "zmk,ext-power-generic";
-    control-gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>; /* WS2812_CE */
-    init-delay-ms = <100>;
-};
+
 
 &gpio0 {
     status = "okay";
@@ -55,4 +51,9 @@
     chosen {
         zmk,underglow = &led_strip;
     };
+    EXT_POWER  {
+    compatible = "zmk,ext-power-generic";
+    control-gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>; /* WS2812_CE */
+    init-delay-ms = <100>;
+};
 };
