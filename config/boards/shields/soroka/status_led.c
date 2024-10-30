@@ -43,7 +43,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zephyr/kernel.h>
 #include <zephyr/settings/settings.h>
 
-#include <math.h>
 #include <stdlib.h>
 
 #include <zephyr/drivers/led_strip.h>
