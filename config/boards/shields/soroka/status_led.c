@@ -44,7 +44,7 @@
 
 static const struct device *led_strip = DEVICE_DT_GET(STRIP_CHOSEN);
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static float brightness_coef = 0.5;  // Коэффициент яркости
+static float brightness_coef = 0.5;  // Значение по умолчанию (0.0 - 1.0)
 
 // Цвета: выключенный и розовый для активного пикселя
 static const struct led_rgb OFF_COLOR = {0, 0, 0};
