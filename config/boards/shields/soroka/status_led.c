@@ -26,6 +26,7 @@
 #include <zmk/events/layer_state_changed.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
+#define LED_BATTERY_SHOW_DELAY 700  // Значение в миллисекундах
 
 #define STRIP_LABEL DT_LABEL(DT_CHOSEN(zmk_underglow))
 #define STRIP_NUM_PIXELS DT_PROP(DT_CHOSEN(zmk_underglow), chain_length)
