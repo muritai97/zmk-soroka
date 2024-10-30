@@ -46,7 +46,7 @@
 
 static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static float brightness_coef = 0.9;  // Значение по умолчанию (0.0 - 1.0)
+static float brightness_coef = 0.1;  // Значение по умолчанию (0.0 - 1.0)
 
 // Цвета: выключенный и розовый для активного пикселя
 static const struct led_rgb OFF = {0, 0, 0};
