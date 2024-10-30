@@ -83,6 +83,13 @@ static const struct led_rgb animation_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR}
     }
 };
+// Функция для очистки светодиодов (выключение всех)
+void clear_leds() {
+    for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
+        pixels[i] = OFF_COLOR;
+    }
+    led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
+}
 
 // Функция для плавного перехода между кадрами
 void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX_WIDTH]) {
@@ -127,13 +134,6 @@ void set_brightness(float coef) {
 // Планировщик работы анимации
 K_WORK_DELAYABLE_DEFINE(battery_animation_work, show_battery_animation);
 
-// Функция для очистки светодиодов (выключение всех)
-void clear_leds() {
-    for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
-        pixels[i] = OFF_COLOR;
-    }
-    led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
-}
 
 // Функция для запуска анимации
 void show_battery() {
@@ -141,7 +141,7 @@ void show_battery() {
 }
 
 void hide_battery() {
-    k_work_schedule(&hide_battery_work, K_NO_WAIT);
+
 }
 
 // Инициализация анимации
