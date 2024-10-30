@@ -36,13 +36,15 @@
 #include <math.h>
 
 #define STRIP_LABEL DT_LABEL(DT_CHOSEN(zmk_underglow))
-#define STRIP_NUM_PIXELS 25
+#define STRIP_NUM_PIXELS DT_PROP(DT_CHOSEN(zmk_underglow), chain_length)
+
+// #define STRIP_NUM_PIXELS 25
 #define MATRIX_WIDTH 5
 #define MATRIX_HEIGHT 5
 #define FRAME_DELAY_MS 600  // Задержка между кадрами
 #define TRANSITION_STEPS 20 // Шагов на переход для плавности
 
-static const struct device *led_strip = DEVICE_DT_GET(STRIP_CHOSEN);
+static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
 static float brightness_coef = 0.5;  // Значение по умолчанию (0.0 - 1.0)
 
