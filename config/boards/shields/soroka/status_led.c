@@ -46,47 +46,47 @@
 
 static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static float brightness_coef = 0.1;  // Значение по умолчанию (0.0 - 1.0)
+static float brightness_coef = 0.9;  // Значение по умолчанию (0.0 - 1.0)
 
 // Цвета: выключенный и розовый для активного пикселя
-static const struct led_rgb OFF_COLOR = {0, 0, 0};
-static const struct led_rgb PINK_COLOR = {255, 20, 147};
+static const struct led_rgb OFF = {0, 0, 0};
+static const struct led_rgb PINK = {255, 20, 147};
 
 // Определение кадров анимации (5x5)
 static const struct led_rgb animation_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     {
-        {OFF_COLOR, PINK_COLOR, OFF_COLOR, PINK_COLOR, PINK_COLOR},
-        {PINK_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR},
-        {PINK_COLOR, OFF_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR},
-        {PINK_COLOR, PINK_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR},
-        {PINK_COLOR, OFF_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR}
+        {OFF, PINK, OFF, PINK, PINK},
+        {PINK, OFF, PINK, OFF, OFF},
+        {PINK, OFF, PINK, PINK, PINK},
+        {PINK, PINK, PINK, OFF, OFF},
+        {PINK, OFF, PINK, PINK, PINK}
     },
     {
-        {OFF_COLOR, OFF_COLOR, OFF_COLOR, OFF_COLOR, OFF_COLOR},
-        {PINK_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR, OFF_COLOR},
-        {OFF_COLOR, PINK_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR},
-        {OFF_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR},
-        {OFF_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR}
+        {OFF, OFF, OFF, OFF, OFF},
+        {PINK, PINK, OFF, OFF, OFF},
+        {OFF, PINK, PINK, OFF, OFF},
+        {OFF, PINK, PINK, PINK, PINK},
+        {OFF, OFF, PINK, OFF, OFF}
     },
     {
-        {OFF_COLOR, PINK_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR},
-        {PINK_COLOR, OFF_COLOR, OFF_COLOR, OFF_COLOR, PINK_COLOR},
-        {PINK_COLOR, OFF_COLOR, OFF_COLOR, OFF_COLOR, PINK_COLOR},
-        {OFF_COLOR, PINK_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR},
-        {OFF_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR}
+        {OFF, PINK, OFF, PINK, OFF},
+        {PINK, OFF, PINK, OFF, PINK},
+        {PINK, OFF, OFF, OFF, PINK},
+        {OFF, PINK, OFF, PINK, OFF},
+        {OFF, OFF, PINK, OFF, OFF}
     },
     {
-        {OFF_COLOR, PINK_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR},
-        {PINK_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR},
-        {PINK_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR},
-        {OFF_COLOR, PINK_COLOR, PINK_COLOR, PINK_COLOR, OFF_COLOR},
-        {OFF_COLOR, OFF_COLOR, PINK_COLOR, OFF_COLOR, OFF_COLOR}
+        {OFF, PINK, OFF, PINK, OFF},
+        {PINK, PINK, PINK, PINK, PINK},
+        {PINK, PINK, PINK, PINK, PINK},
+        {OFF, PINK, PINK, PINK, OFF},
+        {OFF, OFF, PINK, OFF, OFF}
     }
 };
 // Функция для очистки светодиодов (выключение всех)
 void clear_leds() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
-        pixels[i] = OFF_COLOR;
+        pixels[i] = OFF;
     }
     led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
 }
