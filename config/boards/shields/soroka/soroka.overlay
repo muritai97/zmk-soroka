@@ -6,3 +6,11 @@
 
 #include "soroka.dtsi"
 
+/ {
+    default_layout: default_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Default Layout";
+        transform = <&split_space_1_225_275_1_transform>;
+        kscan = <&kscan0>;
+    };
+};

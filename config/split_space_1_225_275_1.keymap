@@ -52,7 +52,7 @@
                 &trans   &trans  &kp UP  &trans &trans   &trans &trans  &kp  F7 &kp F8  &kp  F9  &kp F10   &kp F11   &kp F12  &trans 
                 &trans      &kp LEFT  &kp DOWN  &kp RIGHT  &kp  N4  &kp N5   &kp N6   &kp  N7 &kp N8  &kp N9  &kp N0  &kp   MINUS    &kp EQUAL
                 &trans         &kp  EXCL &kp AT  &kp  HASH   &kp DLLR  &kp   PRCNT &kp CARET   &kp AMPS   &kp  STAR &kp RPAR   &kp RPAR  &kp UNDER &kp PLUS
-                &bootloader &trans   &trans            &trans      &trans       &trans        &trans         &trans  &trans   &rgb_ug RGB_OFF                  &trans           
+                &studio_unlock &trans   &trans            &trans      &trans       &trans        &trans         &trans  &trans   &rgb_ug RGB_OFF                  &trans           
             >;
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
         };
