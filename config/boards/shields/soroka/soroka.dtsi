@@ -6,10 +6,12 @@
 
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <dt-bindings/led/led.h>
-
-&default_layout { transform = <&default_transform>; };
+/*
+* &default_layout { transform = <&default_transform>; };
+* &split_space_3_1_3_layout { transform = <&split_space_3_1_3_transform>; };
+ */
 &split_space_1_225_275_1_layout { transform = <&split_space_1_225_275_1_transform>; };
-&split_space_3_1_3_layout { transform = <&split_space_3_1_3_transform>; };
+
 
 / {
     model = "soroka";
