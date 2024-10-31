@@ -55,7 +55,7 @@
         , <&key_physical_attrs 100 100  700   300    0     0     0> // ALT
         , <&key_physical_attrs 100 100  800   300    0     0     0> // WIN
         , <&key_physical_attrs 100 100  900   300    0     0     0> // MENU
-        , <&key_physical_attrs 100 100  1200   300    0     0    0> // ENC
+        , <&key_physical_attrs 100 100  1200  300    0     0     0> // ENC
     ;
     };
 };
