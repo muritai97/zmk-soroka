@@ -6,6 +6,11 @@
 
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <dt-bindings/led/led.h>
+
+#include "layouts/default_layout.dtsi"
+#include "layouts/split_space_1_225_275_1_layout.dtsi"
+#include "layouts/split_space_3_1_3_layout.dtsi"
+
 /*
 * &default_layout { transform = <&default_transform>; };
 * &split_space_3_1_3_layout { transform = <&split_space_3_1_3_transform>; };
