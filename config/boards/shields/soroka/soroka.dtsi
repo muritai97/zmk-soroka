@@ -7,10 +7,17 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <dt-bindings/led/led.h>
 
+&default_layout { transform = <&default_transform>; };
+&split_space_1_225_275_1_layout { transform = <&split_space_1_225_275_1_transform>; };
+&split_space_3_1_3_layout { transform = <&split_space_3_1_3_transform>; };
+
 / {
+    model = "soroka";
+    compatible = "kapee1,soroka";
+
     chosen {
         zmk,kscan = &kscan0;
-        zmk,physical-layout = &default_transform;
+        zmk,physical-layout = &split_space_1_225_275_1_layout;
      };
 
     default_transform: keymap_transform_0 {

@@ -1,0 +1,7 @@
+/ {
+        layouts_willis_position_map: layouts_willis_position_map {
+                compatible = "zmk,physical-layout-position-map";
+
+                complete;
+        };
+};
