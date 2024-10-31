@@ -13,7 +13,7 @@
 
 / {
   chosen {
-    zmk,matrix_transform = &split_space_3_1_3_transform;
+    zmk,physical-layout = &split_space_3_1_3_transform;
   };
 };
 
