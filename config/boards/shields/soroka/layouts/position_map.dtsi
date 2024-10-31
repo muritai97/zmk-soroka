@@ -1,5 +1,5 @@
 / {
-        layouts_willis_position_map: layouts_willis_position_map {
+        layouts_soroka_map: layouts_soroka_map {
                 compatible = "zmk,physical-layout-position-map";
 
                 complete;

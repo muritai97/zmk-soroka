@@ -62,7 +62,7 @@
     };
 };
 
-&split_space_1_225_275_1_map{
+&layouts_soroka_map{
         split_space_1_225_275_1 {
                 physical-layout = <&split_space_1_225_275_1_layout>;
 
