@@ -3,9 +3,9 @@
 #include "position_map.dtsi"
 
 / {
-    split_space_1_225_275_1_layout: split_space_1_225_275_1_layout {
+    split_space_3_1_3_layout: split_space_3_1_3_layout {
         compatible = "zmk,physical-layout";
-        display-name = "split space (1U+2.25U+2.75U+1U)";
+        display-name = "split space (1U+2ds.25U+2.75U+1U)";
 
         keys  //                 w   h    x    y      rot    rx    ry
         = <&key_physical_attrs 100 150    0    0     0     0     0> // TAB
@@ -62,8 +62,8 @@
 };
 
 &layouts_soroka_position_map{
-        split_space_1_225_275_1 {
-                physical-layout = <&split_space_1_225_275_1_layout>;
+        split_space_3_1_3 {
+                physical-layout = <&split_space_3_1_3_layout>;
 
                 positions
                 = < 0  1  2  3  4  5  6  7  8  9  10 11 12 13>
