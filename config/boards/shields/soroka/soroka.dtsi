@@ -8,17 +8,16 @@
 #include <dt-bindings/led/led.h>
 
 
-#include "layouts/split_space_1_225_275_1_layout.dtsi"
-
-
 
 #include "layouts/default_layout.dtsi"
+#include "layouts/split_space_1_225_275_1_layout.dtsi"
 #include "layouts/split_space_3_1_3_layout.dtsi"
+
+
+
 &default_layout { transform = <&default_transform>; };
-&split_space_3_1_3_layout { transform = <&split_space_3_1_3_transform>; };
-
 &split_space_1_225_275_1_layout { transform = <&split_space_1_225_275_1_transform>; };
-
+&split_space_3_1_3_layout { transform = <&split_space_3_1_3_transform>; };
 
 / {
     model = "soroka";
@@ -69,7 +68,6 @@
 
     kscan0: kscan_0 {
         compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN";
         diode-direction = "col2row";
 
         row-gpios 
@@ -103,7 +101,7 @@
         a-gpios = <&gpio0  0  (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&gpio0  1  (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         resolution = <4>;
-        // status = "disabled";
+        status = "disabled";
     };
 
     sensors {
