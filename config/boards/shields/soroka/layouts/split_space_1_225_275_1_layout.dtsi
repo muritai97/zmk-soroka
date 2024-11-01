@@ -22,7 +22,7 @@
         , <&key_physical_attrs 100 100  1150   0      0     0     0> // [
         , <&key_physical_attrs 100 100  1250   0      0     0     0> // ]
         , <&key_physical_attrs 100 100  1350   0      0     0     0> // BACKSLASH
-        , <&key_physical_attrs 175 0  100      100    0     0     0> // CAPS
+        , <&key_physical_attrs 175 100  0      100    0     0     0> // CAPS
         , <&key_physical_attrs 100 100  175    100    0     0     0> // A
         , <&key_physical_attrs 100 100  275    100    0     0     0> // S
         , <&key_physical_attrs 100 100  375    100    0     0     0> // D
