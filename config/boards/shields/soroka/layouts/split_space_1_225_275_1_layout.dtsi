@@ -51,14 +51,14 @@
         , <&key_physical_attrs 125 100  0      300    0     0     0> // CTRL
         , <&key_physical_attrs 125 100  125    300    0     0     0> // WIN
         , <&key_physical_attrs 125 100  250    300    0     0     0> // ALT
-        , <&key_physical_attrs 100 100  350    300    0     0     0> // FN
-        , <&key_physical_attrs 225 100  575    300    0     0     0> // SPACE
-        , <&key_physical_attrs 275 100  850    300    0     0     0> // BACKSPACE
-        , <&key_physical_attrs 100 100  950    300    0     0     0> // FN
+        , <&key_physical_attrs 100 100  375    300    0     0     0> // FN
+        , <&key_physical_attrs 225 100  600    300    0     0     0> // SPACE
+        , <&key_physical_attrs 275 100  875    300    0     0     0> // BACKSPACE
+        , <&key_physical_attrs 100 100  975    300    0     0     0> // FN
         , <&key_physical_attrs 125 100  1075   300    0     0     0> // ALT
         , <&key_physical_attrs 125 100  1200   300    0     0     0> // WIN
         , <&key_physical_attrs 125 100  1325   300    0     0     0> // MENU
-        , <&key_physical_attrs 125 100  1500   300    0     0     0> // ENC
+        , <&key_physical_attrs 100 100  1500   300    0     0     0> // ENC 
     ;
     };
 };
