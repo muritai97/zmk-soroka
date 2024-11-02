@@ -150,6 +150,8 @@ void hide_battery() {
 }
 
 // Обработчик события подключения USB
+
+int usb_listener(const zmk_event_t *eh)
 {
     const struct zmk_usb_conn_state_changed *usb_ev = NULL;
     if ((usb_ev = as_zmk_usb_conn_state_changed(eh)) == NULL)
