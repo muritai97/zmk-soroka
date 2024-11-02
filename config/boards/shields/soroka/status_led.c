@@ -81,7 +81,7 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF, OFF, PINK, OFF, OFF}
     }
 };
-
+struct k_work_delayable transition_work; // This is a workaround for the compiler, don't touch it.
 // Переменные для планировщика плавного перехода
 static const struct led_rgb (*target_frame)[MATRIX_WIDTH];
 static int current_step;
