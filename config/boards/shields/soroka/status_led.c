@@ -116,13 +116,13 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
 }
 
 // Функция для отображения красного креста при подключении USB
-void show_usb_cross_animation(struct k_work *work) {
+void show_usb_animation(struct k_work *work) {
     transition_to_frame(usb_frames);
     k_msleep(FRAME_DELAY_MS);  // Показывать крест в течение одного кадра
 }
 
 // Планировщик для анимации USB
-K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_cross_animation);
+K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
 
 // Функция для анимации батареи
 void show_battery_animation(struct k_work *work) {
@@ -148,16 +148,20 @@ void show_battery() {
 void hide_battery() {
 
 }
-// Функция для запуска анимации USB
-void start_usb_animation() {
-    k_work_schedule(&usb_animation_work, K_NO_WAIT);
-}
 
 // Обработчик события подключения USB
-int usb_listener(const zmk_event_t *eh) {
-    const struct zmk_usb_conn_state_changed *usb_ev = as_zmk_usb_conn_state_changed(eh);
-    if (usb_ev && usb_ev->conn_state != ZMK_USB_CONN_NONE) {
-        start_usb_animation();
+{
+    const struct zmk_usb_conn_state_changed *usb_ev = NULL;
+    if ((usb_ev = as_zmk_usb_conn_state_changed(eh)) == NULL)
+    {
+        return ZMK_EV_EVENT_BUBBLE;
+    }
+
+    usb_conn_state = usb_ev->conn_state;
+
+    if (usb_ev->conn_state != ZMK_USB_CONN_NONE)
+    {
+        k_work_schedule(&usb_animation_work, K_NO_WAIT);
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
