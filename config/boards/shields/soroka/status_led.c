@@ -92,49 +92,36 @@ void scheduled_clear_leds(struct k_work *work) {
 
 // Определение планировщика для очистки светодиодов
 K_WORK_DELAYABLE_DEFINE(clear_leds_work, scheduled_clear_leds);
-struct k_work_delayable transition_work; // This is a workaround for the compiler, don't touch it.
-// Переменные для планировщика плавного перехода
-static const struct led_rgb (*target_frame)[MATRIX_WIDTH];
-static int current_step;
 
-// Функция для обновления состояния перехода
-void scheduled_transition_step(struct k_work *work) {
-    for (int row = 0; row < MATRIX_HEIGHT; row++) {
-        for (int col = 0; col < MATRIX_WIDTH; col++) {
-            int index = row * MATRIX_WIDTH + col;
+// Функция для плавного перехода между кадрами
+void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX_WIDTH]) {
+    struct led_rgb current_frame[STRIP_NUM_PIXELS];
+    for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
+        current_frame[i] = pixels[i];
+    }
 
-            pixels[index].r = round(
-                pixels[index].r + (target_frame[row][col].r - pixels[index].r) * current_step / TRANSITION_STEPS * brightness_coef);
-            pixels[index].g = round(
-                pixels[index].g + (target_frame[row][col].g - pixels[index].g) * current_step / TRANSITION_STEPS * brightness_coef);
-            pixels[index].b = round(
-                pixels[index].b + (target_frame[row][col].b - pixels[index].b) * current_step / TRANSITION_STEPS * brightness_coef);
+    for (int step = 1; step <= TRANSITION_STEPS; step++) {
+        for (int row = 0; row < MATRIX_HEIGHT; row++) {
+            for (int col = 0; col < MATRIX_WIDTH; col++) {
+                int index = row * MATRIX_WIDTH + col;
+
+                pixels[index].r = round(
+                    current_frame[index].r + (target_frame[row][col].r - current_frame[index].r) * step / TRANSITION_STEPS * brightness_coef);
+                pixels[index].g = round(
+                    current_frame[index].g + (target_frame[row][col].g - current_frame[index].g) * step / TRANSITION_STEPS * brightness_coef);
+                pixels[index].b = round(
+                    current_frame[index].b + (target_frame[row][col].b - current_frame[index].b) * step / TRANSITION_STEPS * brightness_coef);
+            }
         }
+        led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
+        k_msleep(FRAME_DELAY_MS / TRANSITION_STEPS);
     }
-    led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
-
-    if (++current_step <= TRANSITION_STEPS) {
-        k_work_schedule(&transition_work, K_MSEC(FRAME_DELAY_MS / TRANSITION_STEPS));
-    } else {
-        k_work_schedule(&clear_leds_work, K_NO_WAIT);  // Очищаем светодиоды после завершения
-    }
+    k_work_schedule(&clear_leds_work, K_NO_WAIT);
 }
-
-// Определение планировщика для перехода
-K_WORK_DELAYABLE_DEFINE(transition_work, scheduled_transition_step);
-
-// Функция для запуска перехода
-void start_transition_to_frame(const struct led_rgb frame[MATRIX_HEIGHT][MATRIX_WIDTH]) {
-    target_frame = frame;
-    current_step = 1;
-    k_work_schedule(&transition_work, K_NO_WAIT);
-}
-
-
 
 // Функция для отображения красного креста при подключении USB
 void show_usb_animation(struct k_work *work) {
-    start_transition_to_frame(usb_frames);
+    transition_to_frame(usb_frames);
     k_msleep(FRAME_DELAY_MS);  // Показывать крест в течение одного кадра
     return;
 }
@@ -146,7 +133,7 @@ K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
 void show_battery_animation(struct k_work *work) {
     int num_frames = sizeof(battery_frames) / sizeof(battery_frames[0]);
     for (int frame = 0; frame < num_frames; frame++) {
-        start_transition_to_frame(battery_frames[frame]);
+        transition_to_frame(battery_frames[frame]);
         k_msleep(FRAME_DELAY_MS);
     }
     return;
