@@ -81,6 +81,17 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF, OFF, PINK, OFF, OFF}
     }
 };
+
+// Функция для очистки светодиодов через планировщик
+void scheduled_clear_leds(struct k_work *work) {
+    for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
+        pixels[i] = OFF;
+    }
+    led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
+}
+
+// Определение планировщика для очистки светодиодов
+K_WORK_DELAYABLE_DEFINE(clear_leds_work, scheduled_clear_leds);
 struct k_work_delayable transition_work; // This is a workaround for the compiler, don't touch it.
 // Переменные для планировщика плавного перехода
 static const struct led_rgb (*target_frame)[MATRIX_WIDTH];
@@ -119,16 +130,7 @@ void start_transition_to_frame(const struct led_rgb frame[MATRIX_HEIGHT][MATRIX_
     k_work_schedule(&transition_work, K_NO_WAIT);
 }
 
-// Функция для очистки светодиодов через планировщик
-void scheduled_clear_leds(struct k_work *work) {
-    for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
-        pixels[i] = OFF;
-    }
-    led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
-}
 
-// Определение планировщика для очистки светодиодов
-K_WORK_DELAYABLE_DEFINE(clear_leds_work, scheduled_clear_leds);
 
 // Функция для отображения красного креста при подключении USB
 void show_usb_animation(struct k_work *work) {
