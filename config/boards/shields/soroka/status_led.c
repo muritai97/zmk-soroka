@@ -138,11 +138,16 @@ void set_brightness(float coef) {
     brightness_coef = fmax(0.0, fmin(coef, 1.0));  
 }
 
+// Планировщик работы анимации
+K_WORK_DELAYABLE_DEFINE(battery_animation_work, show_battery_animation);
+
 // Функция для запуска анимации батареи
 void show_battery() {
     k_work_schedule(&battery_animation_work, K_NO_WAIT);
 }
+void hide_battery() {
 
+}
 // Функция для запуска анимации USB
 void start_usb_animation() {
     k_work_schedule(&usb_animation_work, K_NO_WAIT);
