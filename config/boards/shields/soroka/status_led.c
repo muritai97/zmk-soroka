@@ -25,35 +25,32 @@
 #include <zmk/rgb_underglow.h>
 #include <zmk/events/layer_state_changed.h>
 
-#include <zephyr/drivers/led_strip.h>
-#include <zmk/rgb_underglow.h>
-#include <zephyr/kernel.h>
-#include <math.h>
-
-#include <zephyr/drivers/led_strip.h>
-#include <zmk/rgb_underglow.h>
-#include <zephyr/kernel.h>
-#include <math.h>
-
 #define STRIP_LABEL DT_LABEL(DT_CHOSEN(zmk_underglow))
 #define STRIP_NUM_PIXELS DT_PROP(DT_CHOSEN(zmk_underglow), chain_length)
-
-// #define STRIP_NUM_PIXELS 25
 #define MATRIX_WIDTH 5
 #define MATRIX_HEIGHT 5
-#define FRAME_DELAY_MS 600  // Задержка между кадрами
-#define TRANSITION_STEPS 20 // Шагов на переход для плавности
+#define FRAME_DELAY_MS 600  
+#define TRANSITION_STEPS 20 
 
 static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static float brightness_coef = 0.1;  // Значение по умолчанию (0.0 - 1.0)
+static float brightness_coef = 0.1;
 
-// Цвета: выключенный и розовый для активного пикселя
 static const struct led_rgb OFF = {0, 0, 0};
 static const struct led_rgb PINK = {255, 20, 147};
+static const struct led_rgb RED = {255, 0, 0};
 
-// Определение кадров анимации (5x5)
-static const struct led_rgb animation_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
+// Красный крест для USB подключения
+static const struct led_rgb usb_frames[MATRIX_HEIGHT][MATRIX_WIDTH] = {
+    {OFF, OFF, RED, OFF, OFF},
+    {OFF, RED, RED, RED, OFF},
+    {RED, RED, RED, RED, RED},
+    {OFF, RED, RED, RED, OFF},
+    {OFF, OFF, RED, OFF, OFF}
+};
+
+// Обычные кадры анимации
+static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     {
         {OFF, PINK, OFF, PINK, PINK},
         {PINK, OFF, PINK, OFF, OFF},
@@ -83,7 +80,9 @@ static const struct led_rgb animation_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF, OFF, PINK, OFF, OFF}
     }
 };
-// Функция для очистки светодиодов (выключение всех)
+};
+
+// Функция для очистки светодиодов
 void clear_leds() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         pixels[i] = OFF;
@@ -117,38 +116,52 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
     clear_leds();
 }
 
-// Функция анимации батареи
+// Функция для отображения красного креста при подключении USB
+void show_usb_cross_animation(struct k_work *work) {
+    transition_to_frame(usb_frames);
+    k_msleep(FRAME_DELAY_MS);  // Показывать крест в течение одного кадра
+}
+
+// Планировщик для анимации USB
+K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_cross_animation);
+
+// Функция для анимации батареи
 void show_battery_animation(struct k_work *work) {
-    int num_frames = sizeof(animation_frames) / sizeof(animation_frames[0]);
+    int num_frames = sizeof(battery_frames) / sizeof(battery_frames[0]);
     for (int frame = 0; frame < num_frames; frame++) {
-        transition_to_frame(animation_frames[frame]);
+        transition_to_frame(battery_frames[frame]);
         k_msleep(FRAME_DELAY_MS);
     }
 }
 
 // Установка яркости
 void set_brightness(float coef) {
-    brightness_coef = fmax(0.0, fmin(coef, 1.0));  // Ограничение в пределах 0-1
+    brightness_coef = fmax(0.0, fmin(coef, 1.0));  
 }
 
-// Планировщик работы анимации
-K_WORK_DELAYABLE_DEFINE(battery_animation_work, show_battery_animation);
-
-
-// Функция для запуска анимации
+// Функция для запуска анимации батареи
 void show_battery() {
     k_work_schedule(&battery_animation_work, K_NO_WAIT);
 }
 
-void hide_battery() {
-
+// Функция для запуска анимации USB
+void start_usb_animation() {
+    k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 
-// Инициализация анимации
-void init_led_matrix() {
-    set_brightness(0.5);  // Установить начальную яркость
+// Обработчик события подключения USB
+int usb_listener(const zmk_event_t *eh) {
+    const struct zmk_usb_conn_state_changed *usb_ev = as_zmk_usb_conn_state_changed(eh);
+    if (usb_ev && usb_ev->conn_state != ZMK_USB_CONN_NONE) {
+        start_usb_animation();
+    }
+    return ZMK_EV_EVENT_BUBBLE;
 }
+ZMK_LISTENER(usb_listener, usb_listener);
+ZMK_SUBSCRIPTION(usb_listener, zmk_usb_conn_state_changed);
+
 // Инициализация системы
+void init_led_matrix() {
+    set_brightness(0.5); 
+}
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
-
-
