@@ -82,13 +82,16 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     }
 };
 
-// Функция для очистки светодиодов
-void clear_leds() {
+// Функция для очистки светодиодов через планировщик
+void scheduled_clear_leds(struct k_work *work) {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         pixels[i] = OFF;
     }
     led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
 }
+
+// Определение планировщика для очистки светодиодов
+K_WORK_DELAYABLE_DEFINE(clear_leds_work, scheduled_clear_leds);
 
 // Функция для плавного перехода между кадрами
 void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX_WIDTH]) {
@@ -113,7 +116,7 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
         led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
         k_msleep(FRAME_DELAY_MS / TRANSITION_STEPS);
     }
-    clear_leds();
+    k_work_schedule(&clear_leds_work, K_NO_WAIT);
 }
 
 // Функция для отображения красного креста при подключении USB
@@ -152,22 +155,22 @@ void show_battery() {
 
 // Функция для отключения анимации батареи
 void hide_battery() {
-    clear_leds();
+    k_work_schedule(&clear_leds_work, K_NO_WAIT);
     return;
 }
 
 // Обработчик события подключения USB
 int usb_listener(const zmk_event_t *eh) {
     const struct zmk_usb_conn_state_changed *usb_ev = as_zmk_usb_conn_state_changed(eh);
-    if (usb_ev == NULL) {
-        return ZMK_EV_EVENT_BUBBLE;
-    }
+    // if (usb_ev == NULL) {
+        // return ZMK_EV_EVENT_BUBBLE;
+    // }
 
     usb_conn_state = usb_ev->conn_state;
 
-    if (usb_ev->conn_state != ZMK_USB_CONN_NONE) {
+    // if (usb_ev->conn_state != ZMK_USB_CONN_NONE) {
         k_work_schedule(&usb_animation_work, K_NO_WAIT);
-    }
+    // }
     return ZMK_EV_EVENT_BUBBLE;
 }
 
