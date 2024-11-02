@@ -177,7 +177,6 @@ ZMK_SUBSCRIPTION(usb_listener, zmk_usb_conn_state_changed);
 // Инициализация системы
 void init_led_matrix() {
     if (!device_is_ready(led_strip)) {
-        LOG_ERR("LED strip device not ready");
         return;
     }
     set_brightness(0.5); 
