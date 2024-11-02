@@ -80,7 +80,6 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF, OFF, PINK, OFF, OFF}
     }
 };
-};
 
 // Функция для очистки светодиодов
 void clear_leds() {
