@@ -82,16 +82,13 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     }
 };
 
-// Функция для очистки светодиодов через планировщик
-void scheduled_clear_leds(struct k_work *work) {
+
+void clear_leds() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         pixels[i] = OFF;
     }
     led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
 }
-
-// Определение планировщика для очистки светодиодов
-K_WORK_DELAYABLE_DEFINE(clear_leds_work, scheduled_clear_leds);
 
 // Функция для плавного перехода между кадрами
 void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX_WIDTH]) {
@@ -116,7 +113,7 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
         led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
         k_msleep(FRAME_DELAY_MS / TRANSITION_STEPS);
     }
-    k_work_schedule(&clear_leds_work, K_NO_WAIT);
+    kclear_leds();
 }
 
 // Функция для отображения красного креста при подключении USB
@@ -127,7 +124,7 @@ void show_usb_animation(struct k_work *work) {
 }
 
 // Планировщик для анимации USB
-K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
+// K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
 
 // Функция для анимации батареи
 void show_battery_animation(struct k_work *work) {
@@ -155,7 +152,7 @@ void show_battery() {
 
 // Функция для отключения анимации батареи
 void hide_battery() {
-    k_work_schedule(&clear_leds_work, K_NO_WAIT);
+    kclear_leds();
     return;
 }
 
@@ -169,7 +166,8 @@ int usb_listener(const zmk_event_t *eh) {
     usb_conn_state = usb_ev->conn_state;
 
     if (usb_ev->conn_state != ZMK_USB_CONN_NONE) {
-        k_work_schedule(&usb_animation_work, K_NO_WAIT);
+        // k_work_schedule(&usb_animation_work, K_NO_WAIT);
+        show_usb_animation();
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
@@ -183,6 +181,6 @@ void init_led_matrix() {
         return;
     }
     set_brightness(0.5); 
-    k_work_schedule(&usb_animation_work, K_NO_WAIT);
+    show_usb_animation();
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
