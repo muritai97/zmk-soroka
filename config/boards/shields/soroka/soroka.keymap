@@ -35,6 +35,7 @@
                 , <&macro_tap     &kp KP_N4 &kp KP_N6>    
                 , <&macro_release &kp LALT>
                 ;
+            };
         };
 };
 / {
@@ -46,7 +47,7 @@
                 &kp TAB   &kp Q     &kp W     &kp E     &kp R     &kp T     &kp Y     &kp U     &kp I     &kp O     &kp P     &kp LBKT  &kp RBKT  &kp BSLH
                 &kp LCTRL    &kp A     &kp S     &kp D     &kp F     &kp G     &kp H     &kp J     &kp K     &kp L     &kp SCLN  &kp QUOT          &kp ENTER
                 &kp LSHFT     &kp Z     &kp X     &kp C     &kp V     &kp B     &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH        &mt LSHFT MINUS &lt RSE EQUAL 
-                &kp LCTRL &kp LGUI &kp LALT            &lt LWR ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt LWR DEL       &none &none &none          &kp C_MUTE
+                &kp LCTRL &kp LALT &kp   LGUI          &lt LWR ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt LWR DEL       &kp LGUI &kp LALT &kp K_APP          &kp C_MUTE
             >;
             sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
@@ -57,7 +58,7 @@
                 &kp STAR   &kp N7  &kp N8  &kp  N9 &kp PLUS   &none  &kp F1   &kp F2 &kp F3  &kp  F4  &kp F5   &kp F6   &kp F7  &trans 
                 &mt LCTRL KP_SLASH      &kp N4  &kp N5  &kp N6  &kp  MINUS  &none   &kp EXCL      &kp AT    &kp HASH   &kp DLLR  &kp PRCNT &none     &kp ENTER
                  &mt LSHFT N0         &kp  N1 &kp N2  &kp  N3   &numdot  &none &kp CARET   &kp AMPS   &kp  STAR &kp LPAR   &kp RPAR  &mt LSHFT MINUS &lt ADJ EQUAL 
-                &kp LCTRL &kp LGUI &kp LALT            &lt ADJ ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt ADJ DEL       &none &none &none          &kp C_MUTE          
+                &kp LCTRL &kp LGUI &kp LALT            &lt ADJ ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt ADJ DEL       &kp LGUI &kp LALT &kp K_APP           &kp C_MUTE          
             >;
             sensor-bindings = <&inc_dec_kp DOWN UP>;
         };
@@ -68,7 +69,7 @@
                 &kp TAB    &none &kp PG_UP    &none &kp HOME &none &none  &none &none  &none  &none   &kp HOME   &kp UP  &kp PG_UP 
                 &kp LCTRL   &none    &kp LEFT  &kp DOWN  &kp RIGHT      &none   &none   &none &none  &none   &kp LEFT  &kp RIGHT     &kp ENTER
                 &kp LSHFT         &none   &kp  PG_DN    &none   &END  &none    &noe   &none   &none &kp END   &kp DOWN &kp PG_DN &lt ADJ PLUS
-                &kp LCTRL &kp LGUI &kp LALT            &lt ADJ ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt ADJ DEL       &none &none &none          &kp C_MUTE        
+                &kp LCTRL &kp LGUI &kp LALT            &lt ADJ ESC      &mt LSHFT SPACE         &mt RSHFT BSPC       &lt ADJ DEL        &kp LGUI &kp LALT &kp K_APP        &kp C_MUTE        
             >;
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
         };
@@ -76,10 +77,10 @@
         ADJ_layer {
             display-name = "ADJ";
             bindings = <
-                &none   &none  &none  &none &none   &none &none  &none &none  &none   &none   &none   &none  &none 
-                &none      &none   &none   &none   &none    &none    &none    &none   &none   &none   &none   &none       &none 
-                &none         &none  &none   &none     &none   &none    &none    &none    &none   &none    &none   &none  &none 
-                &studio_unlock &bootloader      &none            &none      &none       &none        &none         &none  &none   &none                  &check_bat           
+                &studio_unlock &bootloader   &none  &none &none   &none &none &kp F8   &kp F9 &kp F10  &kp  F11  &kp F12   &none   &none
+                &kp LCTRL      &none   &none   &none   &none    &none    &none    &none   &none   &none   &none   &none       &none 
+                &kp LSHFT         &none  &none   &none     &none   &none    &none    &none    &none   &none    &none   &none  &none 
+                &kp LCTRL &kp LGUI &kp LALT            &none      &none       &none        &none          &kp LGUI &kp LALT &kp K_APP                 &check_bat           
             >;
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
         };
