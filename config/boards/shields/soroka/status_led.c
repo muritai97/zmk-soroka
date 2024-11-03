@@ -124,7 +124,7 @@ void show_usb_animation(struct k_work *work) {
 }
 
 // Планировщик для анимации USB
-// K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
+K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
 
 // Функция для анимации батареи
 void show_battery_animation(struct k_work *work) {
@@ -166,8 +166,8 @@ int usb_listener(const zmk_event_t *eh) {
     usb_conn_state = usb_ev->conn_state;
 
     if (usb_ev->conn_state != ZMK_USB_CONN_NONE) {
-        // k_work_schedule(&usb_animation_work, K_NO_WAIT);
-        show_usb_animation();
+        k_work_schedule(&usb_animation_work, K_NO_WAIT);
+        // show_usb_animation();
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
@@ -181,6 +181,6 @@ void init_led_matrix() {
         return;
     }
     set_brightness(0.5); 
-    show_usb_animation();
+    k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
