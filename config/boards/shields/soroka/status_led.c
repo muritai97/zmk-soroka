@@ -183,5 +183,6 @@ void init_led_matrix() {
         return;
     }
     set_brightness(0.5); 
+    k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
