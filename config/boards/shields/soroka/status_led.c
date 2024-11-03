@@ -152,7 +152,7 @@ void show_battery() {
 
 // Функция для отключения анимации батареи
 void hide_battery() {
-    kclear_leds();
+    clear_leds();
     return;
 }
 
