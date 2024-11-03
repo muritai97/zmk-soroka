@@ -113,7 +113,7 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
         led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
         k_msleep(FRAME_DELAY_MS / TRANSITION_STEPS);
     }
-    kclear_leds();
+    clear_leds();
 }
 
 // Функция для отображения красного креста при подключении USB
