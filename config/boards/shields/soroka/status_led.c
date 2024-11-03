@@ -42,13 +42,13 @@ static const struct led_rgb PINK = {255, 20, 147};
 static const struct led_rgb RED = {255, 0, 0};
 
 // Красный крест для USB подключения
-static const struct led_rgb usb_frames[MATRIX_HEIGHT][MATRIX_WIDTH] = {
+static const struct led_rgb usb_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     {
-    {OFF, OFF, RED, OFF, OFF},
-    {OFF, RED, RED, RED, OFF},
-    {RED, RED, RED, RED, RED},
-    {OFF, RED, RED, RED, OFF},
-    {OFF, OFF, RED, OFF, OFF}
+        {OFF, OFF, RED, OFF, OFF},
+        {OFF, RED, RED, RED, OFF},
+        {RED, RED, RED, RED, RED},
+        {OFF, RED, RED, RED, OFF},
+        {OFF, OFF, RED, OFF, OFF}
     },
     {
         {OFF, OFF, OFF, OFF, OFF},
