@@ -77,10 +77,17 @@
         ADJ_layer {
             display-name = "ADJ";
             bindings = <
+<<<<<<< HEAD
+                &studio_unlock &bootloader   &none  &none &none   &none &none &kp F8   &kp F9 &kp F10  &kp  F11  &kp F12   &none   &none
+                &kp LCTRL      &none   &none   &none   &none    &none    &none    &none   &none   &none   &none   &none       &none 
+                &kp LSHFT         &none  &none   &none     &none   &none    &none    &none    &none   &none    &none   &none  &none 
+                &kp LCTRL &kp LGUI &kp LALT            &none      &none       &none        &none         &none  &none   &none                  &check_bat           
+=======
                 &studio_unlock &bootloader   &none  &none &none   &none &none &kp F8   &kp F9 &kp F10  &kp  F11  &kp F12   &none   &none
                 &kp LCTRL      &none   &none   &none   &none    &none    &none    &none   &none   &none   &none   &none       &none 
                 &kp LSHFT         &none  &none   &none     &none   &none    &none    &none    &none   &none    &none   &none  &none 
                 &kp LCTRL &kp LGUI &kp LALT            &none      &none       &none        &none          &kp LGUI &kp LALT &kp K_APP                 &check_bat           
+>>>>>>> 7146462af40bd3a975b49dd6d84c3fd8ab52383c
             >;
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
         };
