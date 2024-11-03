@@ -183,7 +183,7 @@ void init_led_matrix() {
     // if (!device_is_ready(led_strip)) {
     //     return;
     // }
-    // set_brightness(0.5); 
+    set_brightness(0.05); 
     k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
