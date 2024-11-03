@@ -118,8 +118,11 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
 
 // Функция для отображения красного креста при подключении USB
 void show_usb_animation(struct k_work *work) {
-    transition_to_frame(usb_frames);
-    k_msleep(FRAME_DELAY_MS);  // Показывать крест в течение одного кадра
+    int num_frames = sizeof(usb_frames) / sizeof(usb_frames[0]);
+    for (int frame = 0; frame < num_frames; frame++) {
+        transition_to_frame(usb_frames[frame]);
+        k_msleep(FRAME_DELAY_MS);
+    }
     return;
 }
 
@@ -135,14 +138,14 @@ void show_battery_animation(struct k_work *work) {
     }
     return;
 }
-
+// Планировщик работы анимации
+K_WORK_DELAYABLE_DEFINE(battery_animation_work, show_battery_animation);
 // Установка яркости
 void set_brightness(float coef) {
     brightness_coef = fmax(0.0, fmin(coef, 1.0));  
 }
 
-// Планировщик работы анимации
-K_WORK_DELAYABLE_DEFINE(battery_animation_work, show_battery_animation);
+
 
 // Функция для запуска анимации батареи
 void show_battery() {
@@ -177,10 +180,10 @@ ZMK_SUBSCRIPTION(usb_listener, zmk_usb_conn_state_changed);
 
 // Инициализация системы
 void init_led_matrix() {
-    if (!device_is_ready(led_strip)) {
-        return;
-    }
-    set_brightness(0.5); 
+    // if (!device_is_ready(led_strip)) {
+    //     return;
+    // }
+    // set_brightness(0.5); 
     k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
