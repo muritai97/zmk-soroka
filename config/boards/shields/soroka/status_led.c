@@ -48,6 +48,14 @@ static const struct led_rgb usb_frames[MATRIX_HEIGHT][MATRIX_WIDTH] = {
     {RED, RED, RED, RED, RED},
     {OFF, RED, RED, RED, OFF},
     {OFF, OFF, RED, OFF, OFF}
+    },
+    {
+        {OFF, OFF, OFF, OFF, OFF},
+        {PINK, PINK, OFF, OFF, OFF},
+        {OFF, PINK, PINK, OFF, OFF},
+        {OFF, PINK, PINK, PINK, PINK},
+        {OFF, OFF, PINK, OFF, OFF}
+    }
 };
 
 // Обычные кадры анимации
@@ -183,7 +191,7 @@ void init_led_matrix() {
     // if (!device_is_ready(led_strip)) {
     //     return;
     // }
-    set_brightness(0.05); 
+    set_brightness(0.01); 
     k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
