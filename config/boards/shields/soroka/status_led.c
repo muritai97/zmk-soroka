@@ -89,7 +89,7 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF, PINK, PINK, PINK, OFF},
         {OFF, OFF, PINK, OFF, OFF}
     }
-
+};
 // Work queue and periodic timer
 #define ANIMATION_WORK_Q_STACK_SIZE 1024
 #define ANIMATION_WORK_Q_PRIORITY 5
