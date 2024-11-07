@@ -35,13 +35,13 @@
 static enum zmk_usb_conn_state usb_conn_state = ZMK_USB_CONN_NONE;
 static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static float brightness_coef = 1; //0.01;
+static float brightness_coef = 1;
 
 static const struct led_rgb OFF = {0, 0, 0};
 static const struct led_rgb PINK = {255, 20, 147};
 static const struct led_rgb RED = {255, 0, 0};
 
-// Красный крест для USB подключения
+// Анимация USB (Красный крест) и батареи
 static const struct led_rgb usb_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     {
         {OFF, OFF, RED, OFF, OFF},
@@ -59,7 +59,6 @@ static const struct led_rgb usb_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     }
 };
 
-// Обычные кадры анимации
 static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
     {
         {OFF, PINK, OFF, PINK, PINK},
@@ -90,6 +89,7 @@ static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
         {OFF, OFF, PINK, OFF, OFF}
     }
 };
+
 // Work queue and periodic timer
 #define ANIMATION_WORK_Q_STACK_SIZE 1024
 #define ANIMATION_WORK_Q_PRIORITY 5
@@ -144,7 +144,7 @@ void animate_frame() {
         frames = battery_frames;
         num_frames = sizeof(battery_frames) / sizeof(battery_frames[0]);
     } else {
-        k_timer_stop(&animation_timer);
+        hide_animation();  // Автоматически отключаем светодиоды после завершения
         return;
     }
 
@@ -195,16 +195,14 @@ static int init_led_matrix(const struct device *dev) {
                        K_THREAD_STACK_SIZEOF(animation_work_q_stack),
                        ANIMATION_WORK_Q_PRIORITY, NULL);
     k_timer_init(&animation_timer, animate_frame, NULL);
-    // set_brightness(brightness_coef);
     return 0;
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
 
 void show_battery() {
-    // k_work_schedule_for_queue(&animation_work_q, &battery_animation_work, K_NO_WAIT);
+    show_battery_animation();  // Вызов анимации батареи
 }
 
-// Функция для отключения анимации батареи
 void hide_battery() {
-    // clear_leds();
+    // hide_animation();  // Остановка анимации и очистка светодиодов
 }
