@@ -29,8 +29,9 @@
 #define STRIP_NUM_PIXELS DT_PROP(DT_CHOSEN(zmk_underglow), chain_length)
 #define MATRIX_WIDTH 5
 #define MATRIX_HEIGHT 5
-#define FRAME_DELAY_MS 300  
-#define TRANSITION_STEPS 10 
+#define FRAME_DELAY_MS 600  
+#define TRANSITION_STEPS 20 
+#define CLEAR_DELAY_MS 50  // Задержка перед очисткой светодиодов между кадрами
 
 static enum zmk_usb_conn_state usb_conn_state = ZMK_USB_CONN_NONE;
 static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
@@ -144,14 +145,15 @@ void animate_frame() {
         frames = battery_frames;
         num_frames = sizeof(battery_frames) / sizeof(battery_frames[0]);
     } else {
-        hide_animation();  // Автоматически отключаем светодиоды после завершения
+        hide_animation();
         return;
     }
 
-    // Показ кадра и очистка светодиодов перед следующим
     transition_to_frame(frames[current_frame]);
     current_frame = (current_frame + 1) % num_frames;
 
+    // Добавляем небольшую задержку перед очисткой для мерцания между кадрами
+    k_msleep(CLEAR_DELAY_MS);
     clear_leds();  // Выключаем светодиоды между кадрами
 }
 
