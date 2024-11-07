@@ -41,56 +41,9 @@ static const struct led_rgb OFF = {0, 0, 0};
 static const struct led_rgb PINK = {255, 20, 147};
 static const struct led_rgb RED = {255, 0, 0};
 
-// Красный крест для USB подключения
-static const struct led_rgb usb_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
-    {
-        {OFF, OFF, RED, OFF, OFF},
-        {OFF, RED, RED, RED, OFF},
-        {RED, RED, RED, RED, RED},
-        {OFF, RED, RED, RED, OFF},
-        {OFF, OFF, RED, OFF, OFF}
-    },
-    {
-        {OFF, OFF, OFF, OFF, OFF},
-        {PINK, PINK, OFF, OFF, OFF},
-        {OFF, PINK, PINK, OFF, OFF},
-        {OFF, PINK, PINK, PINK, PINK},
-        {OFF, OFF, PINK, OFF, OFF}
-    }
-};
-
-// Обычные кадры анимации
-static const struct led_rgb battery_frames[][MATRIX_HEIGHT][MATRIX_WIDTH] = {
-    {
-        {OFF, PINK, OFF, PINK, PINK},
-        {PINK, OFF, PINK, OFF, OFF},
-        {PINK, OFF, PINK, PINK, PINK},
-        {PINK, PINK, PINK, OFF, OFF},
-        {PINK, OFF, PINK, PINK, PINK}
-    },
-    {
-        {OFF, OFF, OFF, OFF, OFF},
-        {PINK, PINK, OFF, OFF, OFF},
-        {OFF, PINK, PINK, OFF, OFF},
-        {OFF, PINK, PINK, PINK, PINK},
-        {OFF, OFF, PINK, OFF, OFF}
-    },
-    {
-        {OFF, PINK, OFF, PINK, OFF},
-        {PINK, OFF, PINK, OFF, PINK},
-        {PINK, OFF, OFF, OFF, PINK},
-        {OFF, PINK, OFF, PINK, OFF},
-        {OFF, OFF, PINK, OFF, OFF}
-    },
-    {
-        {OFF, PINK, OFF, PINK, OFF},
-        {PINK, PINK, PINK, PINK, PINK},
-        {PINK, PINK, PINK, PINK, PINK},
-        {OFF, PINK, PINK, PINK, OFF},
-        {OFF, OFF, PINK, OFF, OFF}
-    }
-};
-
+K_WORK_QUEUE_DEFINE(my_workqueue, 1024, CONFIG_SYSTEM_WORKQUEUE_PRIORITY, 0);
+struct k_work usb_animation_work;
+struct k_work battery_animation_work;
 
 void clear_leds() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
@@ -99,7 +52,6 @@ void clear_leds() {
     led_strip_update_rgb(led_strip, pixels, STRIP_NUM_PIXELS);
 }
 
-// Функция для плавного перехода между кадрами
 void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX_WIDTH]) {
     struct led_rgb current_frame[STRIP_NUM_PIXELS];
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
@@ -125,50 +77,34 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
     clear_leds();
 }
 
-// Функция для отображения красного креста при подключении USB
-void show_usb_animation(struct k_work *work) {
+void usb_animation_handler(struct k_work *work) {
     int num_frames = sizeof(usb_frames) / sizeof(usb_frames[0]);
     for (int frame = 0; frame < num_frames; frame++) {
         transition_to_frame(usb_frames[frame]);
         k_msleep(FRAME_DELAY_MS);
     }
-    return;
 }
 
-// Планировщик для анимации USB
-K_WORK_DELAYABLE_DEFINE(usb_animation_work, show_usb_animation);
-
-// Функция для анимации батареи
-void show_battery_animation(struct k_work *work) {
+void battery_animation_handler(struct k_work *work) {
     int num_frames = sizeof(battery_frames) / sizeof(battery_frames[0]);
     for (int frame = 0; frame < num_frames; frame++) {
         transition_to_frame(battery_frames[frame]);
         k_msleep(FRAME_DELAY_MS);
     }
-    return;
 }
-// Планировщик работы анимации
-K_WORK_DELAYABLE_DEFINE(battery_animation_work, show_battery_animation);
-// Установка яркости
+
 void set_brightness(float coef) {
     brightness_coef = fmax(0.0, fmin(coef, 1.0));  
 }
 
-
-
-// Функция для запуска анимации батареи
 void show_battery() {
-    k_work_schedule(&battery_animation_work, K_NO_WAIT);
-    return;
+    k_work_submit_to_queue(&my_workqueue, &battery_animation_work);
 }
 
-// Функция для отключения анимации батареи
 void hide_battery() {
     clear_leds();
-    return;
 }
 
-// Обработчик события подключения USB
 int usb_listener(const zmk_event_t *eh) {
     const struct zmk_usb_conn_state_changed *usb_ev = as_zmk_usb_conn_state_changed(eh);
     if (usb_ev == NULL) {
@@ -178,8 +114,7 @@ int usb_listener(const zmk_event_t *eh) {
     usb_conn_state = usb_ev->conn_state;
 
     if (usb_ev->conn_state == ZMK_USB_CONN_POWERED) {
-        k_work_schedule(&usb_animation_work, K_NO_WAIT);
-        // show_usb_animation();
+        k_work_submit_to_queue(&my_workqueue, &usb_animation_work);
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
@@ -187,12 +122,9 @@ int usb_listener(const zmk_event_t *eh) {
 ZMK_LISTENER(usb_listener, usb_listener);
 ZMK_SUBSCRIPTION(usb_listener, zmk_usb_conn_state_changed);
 
-// Инициализация системы
 void init_led_matrix() {
-    // if (!device_is_ready(led_strip)) {
-    //     return;
-    // }
+    k_work_init(&usb_animation_work, usb_animation_handler);
+    k_work_init(&battery_animation_work, battery_animation_handler);
     set_brightness(brightness_coef); 
-    // k_work_schedule(&usb_animation_work, K_NO_WAIT);
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
