@@ -84,7 +84,7 @@ void transition_to_frame(const struct led_rgb target_frame[MATRIX_HEIGHT][MATRIX
 // Add a check for work queue start as well
 static int init_led_matrix(const struct device *dev) {
     if (!device_is_ready(led_strip)) {
-        LOG_ERR("LED strip device not found");
+        // LOG_ERR("LED strip device not found");
         return -1;
     }
     k_work_queue_init(&animation_work_q);
