@@ -199,3 +199,12 @@ static int init_led_matrix(const struct device *dev) {
     return 0;
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+
+void show_battery() {
+    // k_work_schedule_for_queue(&animation_work_q, &battery_animation_work, K_NO_WAIT);
+}
+
+// Функция для отключения анимации батареи
+void hide_battery() {
+    // clear_leds();
+}
