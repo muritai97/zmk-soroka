@@ -35,7 +35,7 @@
 static enum zmk_usb_conn_state usb_conn_state = ZMK_USB_CONN_NONE;
 static const struct device *led_strip = DEVICE_DT_GET(DT_CHOSEN(zmk_underglow));
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static float brightness_coef = 0.01;
+static float brightness_coef = 1; //0.01;
 
 static const struct led_rgb OFF = {0, 0, 0};
 static const struct led_rgb PINK = {255, 20, 147};
