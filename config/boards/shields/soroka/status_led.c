@@ -195,7 +195,7 @@ static int init_led_matrix(const struct device *dev) {
                        K_THREAD_STACK_SIZEOF(animation_work_q_stack),
                        ANIMATION_WORK_Q_PRIORITY, NULL);
     k_timer_init(&animation_timer, animate_frame, NULL);
-    set_brightness(brightness_coef);
+    // set_brightness(brightness_coef);
     return 0;
 }
 SYS_INIT(init_led_matrix, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
