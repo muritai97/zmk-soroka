@@ -106,7 +106,7 @@ static enum animation_type current_animation = ANIMATION_NONE;
 static int current_frame = 0;
 
 void clear_leds() {
-    if (!device_is_ready(led_strip)) return;
+    // if (!device_is_ready(led_strip)) return;
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         pixels[i] = OFF;
     }
@@ -204,5 +204,5 @@ void show_battery() {
 }
 
 void hide_battery() {
-    // hide_animation();  // Остановка анимации и очистка светодиодов
+    hide_animation();  // Остановка анимации и очистка светодиодов
 }
